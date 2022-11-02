@@ -1,6 +1,7 @@
 import React from "react";
 
 const TravelList = (props) => {
+  console.log(props);
   const travellings = props.data;
 
   return (
