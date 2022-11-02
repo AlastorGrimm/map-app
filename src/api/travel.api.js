@@ -9,7 +9,7 @@ const travelList = [
   },
   {
     id: '24243442',
-    country: 'Россия',
+    country: 'Украина',
     dateBegin: '15.08.2021',
     dateEnd: '24.09.2022',
     isfinished: true,
@@ -17,7 +17,7 @@ const travelList = [
   },
   {
     id: '22243442',
-    country: 'Россия',
+    country: 'Япония',
     dateBegin: '07.10.2022',
     dateEnd: '',
     isfinished: false,

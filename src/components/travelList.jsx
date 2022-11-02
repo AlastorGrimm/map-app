@@ -1,14 +1,8 @@
-import React, { useState } from "react";
-import * as TravelApi from "../api/travel.api";
+import React from "react";
 
-const TravelList = () => {
-  const [travellings, setTravellings] = useState(TravelApi.fetchAll());
+const TravelList = (props) => {
+  const travellings = props.data;
 
-  const handleDeleteTravel = (id) => {
-    setTravellings(
-      (prevState) => (prevState = prevState.filter((t) => t.id !== id))
-    );
-  };
   return (
     <div className="m-4">
       <div className="d-flex justify-content-between">
@@ -50,7 +44,7 @@ const TravelList = () => {
                   <button
                     type="button"
                     className="btn btn-danger"
-                    onClick={() => handleDeleteTravel(travel.id)}>
+                    onClick={() => props.onDelete(travel.id)}>
                     Удалить
                   </button>
                 </td>
