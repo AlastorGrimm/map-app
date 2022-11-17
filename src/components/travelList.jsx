@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
 import Pagination from "./pagination";
 import GroupList from "./groupList";
+import TravellingTable from "./travellingTable";
 import { cropPages } from "../utils/paginate.js";
 import api from "../api/index";
+import _ from "lodash";
 
 const TravelList = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [countries, setCountries] = useState();
   const [selectedCountry, setSelectedCountry] = useState();
-  const travellings = props.data;
+  const [travellings, setTravellings] = useState(props.data);
+  const [sortBy, setSortBy] = useState({ iter: "travelName", order: "asc" });
 
-  const pageSize = 5;
+  const pageSize = 10;
 
   const handlePageChange = (pageIndex) => {
     setCurrentPage(pageIndex);
@@ -19,16 +22,33 @@ const TravelList = (props) => {
   const handleItemSelect = (selectedItem) => {
     setSelectedCountry(selectedItem);
   };
+
+  const handleDeleteTravel = (id) => {
+    let newTravellings = [...travellings];
+    newTravellings = newTravellings.filter((t) => t.id !== id);
+    setTravellings(newTravellings);
+  };
+
   //универсальные методы заводим в utils
   const filteredTravellings = selectedCountry
     ? travellings.filter((t) => t.country === selectedCountry.name)
     : travellings;
 
+  const sortedUsers = _.orderBy(
+    filteredTravellings,
+    [sortBy.iter],
+    [sortBy.order]
+  );
   const handleResetFilters = () => {
     setSelectedCountry();
   };
+
+  const handleSort = (item) => {
+    setSortBy(item);
+  };
+
   const itemsCount = filteredTravellings.length;
-  const cropedPages = cropPages(filteredTravellings, currentPage, pageSize);
+  const cropedPages = cropPages(sortedUsers, currentPage, pageSize);
 
   useEffect(() => {
     api.countries.fetchAll().then((response) => setCountries(response));
@@ -73,39 +93,12 @@ const TravelList = (props) => {
             )}
           </div>
           <div className="w-75">
-            <table className="table table-striped table-hover ">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Название путешествия</th>
-                  <th scope="col">Страна</th>
-                  <th scope="col">Начало</th>
-                  <th scope="col">Конец</th>
-                  <th scope="col">Статус путешествия</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {cropedPages.map((travel, index) => (
-                  <tr key={travel.id}>
-                    <th>{index + 1}</th>
-                    <td>{travel.travelName}</td>
-                    <td>{travel.country}</td>
-                    <td>{travel.dateBegin}</td>
-                    <td>{travel.dateEnd ? travel.dateEnd : "По н.в."}</td>
-                    <td>{travel.isfinished ? "Завершено" : "В процессе"}</td>
-                    <td>
-                      <button
-                        type="button"
-                        className="btn btn-danger"
-                        onClick={() => props.onDelete(travel.id)}>
-                        Удалить
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <TravellingTable
+              cropedPages={cropedPages}
+              onDelete={handleDeleteTravel}
+              onSort={handleSort}
+              currentSort={sortBy}
+            />
             <div className="d-flex justify-content-center">
               <Pagination
                 itemsCount={itemsCount}
