@@ -59,7 +59,9 @@ const travelList = [
   },
 ]
 
-
+export function addTravel(travel) {
+  travelList.push(travel);
+}
 
 export function fetchAll () {
   return travelList

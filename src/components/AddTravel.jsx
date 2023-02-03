@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import './AddTravel.css';
-import './AddTravelFunct';
+import Form from './AddTravelFunct';
 
 function Modal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,7 +12,7 @@ function Modal() {
         <div className="modal-overlay">
           <div className="modal-content">
             <p>Добавить путешествие</p>
-            <handleAddRow/>
+            <Form/>
             <button onClick={() => setIsOpen(false)}>Close</button>
           </div>
         </div>
