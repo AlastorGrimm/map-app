@@ -5,6 +5,7 @@ import TravellingTable from "./travellingTable";
 import { cropPages } from "../utils/paginate.js";
 import api from "../api/index";
 import _ from "lodash";
+import Modal from "./AddTravel";
 
 const TravelList = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -106,10 +107,15 @@ const TravelList = (props) => {
                 onPageChange={handlePageChange}
                 currentPage={currentPage}
               />
+              
             </div>
+            <Modal />
           </div>
+          
         </div>
+
       )}
+      
     </div>
   );
 };
